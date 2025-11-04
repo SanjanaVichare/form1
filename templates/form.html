@@ -1,0 +1,1169 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reserve Your Studio Space | INWMH Studios</title>
+    <style>
+        /* Your existing CSS styles here */
+        :root {
+            --bg-color: #f8f9fa;
+            --text-color: #1a1a1a;
+            --border-color: #e0e0e0;
+            --accent-color: #000000;
+            --accent-hover: #333333;
+            --disabled-color: #a0a0a0;
+            --section-bg: #ffffff;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            --radius: 10px;
+            --section-radius: 8px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            background: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            padding: 2rem 1rem;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .container {
+            max-width: 900px;
+            width: 100%;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding: 0 1rem;
+        }
+
+        h1 {
+            font-weight: 700;
+            font-size: 2.5rem;
+            margin-bottom: 0.75rem;
+            letter-spacing: -0.5px;
+        }
+
+        .subtitle {
+            font-size: 1.1rem;
+            color: #555;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .form-container {
+            background: var(--section-bg);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .form-progress {
+            display: flex;
+            background: #f0f0f0;
+            padding: 1.5rem 2rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .progress-step {
+            display: flex;
+            align-items: center;
+            flex: 1;
+            font-weight: 500;
+            font-size: 0.9rem;
+            color: #777;
+        }
+
+        .progress-step.active {
+            color: var(--accent-color);
+            font-weight: 600;
+        }
+
+        .progress-step .step-number {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: #ddd;
+            color: #777;
+            margin-right: 0.75rem;
+            font-size: 0.8rem;
+        }
+
+        .progress-step.active .step-number {
+            background: var(--accent-color);
+            color: white;
+        }
+
+        .progress-step:not(:last-child)::after {
+            content: "";
+            flex: 1;
+            height: 1px;
+            background: #ddd;
+            margin: 0 1rem;
+        }
+
+        form {
+            padding: 2.5rem;
+        }
+
+        .form-section {
+            margin-bottom: 0;
+            padding: 1.5rem;
+            border-radius: var(--section-radius);
+            border: 1px solid var(--border-color);
+            background: #fcfcfc;
+            transition: all 0.3s ease;
+            display: none;
+        }
+
+        .form-section.active {
+            display: block;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        .form-section:hover {
+            border-color: #c0c0c0;
+        }
+
+        h2 {
+            font-size: 1.35rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        h2::before {
+            content: "";
+            display: block;
+            width: 4px;
+            height: 20px;
+            background: var(--accent-color);
+            border-radius: 2px;
+            margin-right: 0.75rem;
+        }
+
+        .form-row {
+            display: flex;
+            gap: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .form-row:last-child {
+            margin-bottom: 0;
+        }
+
+        .form-group {
+            flex: 1;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--text-color);
+            font-size: 0.95rem;
+        }
+
+        .required::after {
+            content: " *";
+            color: #d00;
+        }
+
+        input,
+        select,
+        textarea {
+            width: 100%;
+            padding: 0.875rem 1rem;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            background: #fff;
+            color: var(--text-color);
+            font-size: 1rem;
+            font-family: inherit;
+            transition: all 0.2s ease;
+        }
+
+        input:focus,
+        select:focus,
+        textarea:focus {
+            border-color: var(--accent-color);
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.05);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        select[multiple] {
+            min-height: 120px;
+            padding: 0.5rem;
+        }
+
+        small {
+            display: block;
+            margin-top: 0.5rem;
+            font-size: 0.8rem;
+            color: #777;
+        }
+
+        .checkbox-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-top: 0.5rem;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+        }
+
+        .checkbox-item input {
+            width: auto;
+            margin-right: 0.5rem;
+        }
+
+        .form-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .nav-btn {
+            background: var(--accent-color);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .nav-btn:hover {
+            background: var(--accent-hover);
+        }
+
+        .nav-btn.prev {
+            background: #777;
+        }
+
+        .nav-btn.prev:hover {
+            background: #555;
+        }
+
+        .nav-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        .submit-btn {
+            background: var(--accent-color);
+            color: white;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            width: 100%;
+            margin-top: 1rem;
+            letter-spacing: 0.5px;
+        }
+
+        .submit-btn:hover {
+            background: var(--accent-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .submit-btn:active {
+            transform: translateY(0);
+        }
+
+        option.disabled {
+            color: var(--disabled-color);
+        }
+
+        .note {
+            background: #f5f5f5;
+            padding: 1rem 1.25rem;
+            border-left: 4px solid var(--accent-color);
+            font-size: 0.9rem;
+            color: #555;
+            border-radius: 4px;
+            margin-top: 1.5rem;
+        }
+
+        /* Image selection styles */
+        .image-selection {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        .image-option {
+            position: relative;
+            border-radius: 8px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .image-option:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+        }
+
+        .image-option.selected {
+            border-color: var(--accent-color);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .image-option img {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .image-label {
+            padding: 0.75rem;
+            text-align: center;
+            font-weight: 500;
+            background: white;
+        }
+
+        .image-option input {
+            position: absolute;
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        /* Time slot styles */
+        .time-slots-container {
+            margin-top: 1rem;
+        }
+
+        .time-slots-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 0.75rem;
+            margin-top: 0.5rem;
+        }
+
+        .time-slot {
+            padding: 0.75rem 0.5rem;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            background: white;
+        }
+
+        .time-slot:hover {
+            border-color: var(--accent-color);
+        }
+
+        .time-slot.selected {
+            background: var(--accent-color);
+            color: white;
+            border-color: var(--accent-color);
+        }
+
+        .time-slot.booked {
+            background: #f5f5f5;
+            color: var(--disabled-color);
+            cursor: not-allowed;
+            text-decoration: line-through;
+        }
+
+        .time-slot.booked:hover {
+            border-color: var(--border-color);
+        }
+
+        .time-slot.unavailable {
+            background: #ffe6e6;
+            color: #cc0000;
+            cursor: not-allowed;
+        }
+
+        .time-slot.unavailable:hover {
+            border-color: #ffcccc;
+        }
+
+        .time-slot-label {
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .time-slot-status {
+            font-size: 0.7rem;
+            margin-top: 0.25rem;
+        }
+
+        .booking-visualization {
+            margin-top: 1.5rem;
+            padding: 1rem;
+            background: #f9f9f9;
+            border-radius: 6px;
+            border-left: 4px solid var(--accent-color);
+        }
+
+        .booking-visualization h4 {
+            margin-bottom: 0.75rem;
+            font-size: 1rem;
+        }
+
+        .time-line {
+            display: flex;
+            height: 40px;
+            background: #f0f0f0;
+            border-radius: 4px;
+            position: relative;
+            margin-bottom: 0.5rem;
+        }
+
+        .time-marker {
+            position: absolute;
+            height: 100%;
+            border-radius: 4px;
+        }
+
+        .time-marker.booked {
+            background: #ffcccc;
+        }
+
+        .time-marker.selected {
+            background: var(--accent-color);
+        }
+
+        .time-labels {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.8rem;
+            color: #777;
+        }
+
+        /* Success message */
+        .success-message {
+            display: none;
+            background: #f0f9f0;
+            border: 1px solid #c6e7c6;
+            border-radius: 6px;
+            padding: 1.5rem;
+            margin-top: 1.5rem;
+            text-align: center;
+        }
+
+        .success-message h3 {
+            color: #2d5a2d;
+            margin-bottom: 0.5rem;
+        }
+
+        .success-message p {
+            color: #3d6b3d;
+        }
+
+        .error-message {
+            display: none;
+            background: #ffe6e6;
+            border: 1px solid #ffcccc;
+            border-radius: 6px;
+            padding: 1rem;
+            margin-top: 1rem;
+            color: #cc0000;
+            text-align: center;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            body {
+                padding: 1rem 0.5rem;
+            }
+
+            form {
+                padding: 1.5rem;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            .subtitle {
+                font-size: 1rem;
+            }
+
+            .form-row {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .form-progress {
+                flex-direction: column;
+                gap: 1rem;
+                padding: 1rem;
+            }
+
+            .progress-step:not(:last-child)::after {
+                display: none;
+            }
+
+            .image-selection {
+                grid-template-columns: 1fr;
+            }
+
+            .form-navigation {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .nav-btn {
+                width: 100%;
+            }
+
+            .time-slots-grid {
+                grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            }
+        }
+
+        /* Animation for form sections */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <h1>Reserve Your Studio Space</h1>
+            <p class="subtitle">Book your professional recording session at INWMH Studios</p>
+        </header>
+
+        <div class="form-container">
+            <div class="form-progress">
+                <div class="progress-step active">
+                    <span class="step-number">1</span>
+                    <span>Personal Details</span>
+                </div>
+                <div class="progress-step">
+                    <span class="step-number">2</span>
+                    <span>Studio Setup</span>
+                </div>
+                <div class="progress-step">
+                    <span class="step-number">3</span>
+                    <span>Package Selection</span>
+                </div>
+                <div class="progress-step">
+                    <span class="step-number">4</span>
+                    <span>Timing</span>
+                </div>
+                <div class="progress-step">
+                    <span class="step-number">5</span>
+                    <span>Review & Submit</span>
+                </div>
+            </div>
+
+            <form id="reservationForm">
+                <!-- Section 1 -->
+                <div class="form-section active" id="section1">
+                    <h2>Personal Details</h2>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="name" class="required">Full Name</label>
+                            <input type="text" id="name" name="name" required placeholder="Enter your full name">
+                        </div>
+                        <div class="form-group">
+                            <label for="email" class="required">Email Address</label>
+                            <input type="email" id="email" name="email" required placeholder="your.email@example.com">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="phone" class="required">Contact Number</label>
+                            <input type="text" id="phone" name="phone" required placeholder="Your phone number">
+                        </div>
+                        <div class="form-group">
+                            <label for="company">Company / Organization</label>
+                            <input type="text" id="company" name="company" placeholder="Your company (if applicable)">
+                        </div>
+                    </div>
+                    <div class="form-navigation">
+                        <button type="button" class="nav-btn prev" disabled>Previous</button>
+                        <button type="button" class="nav-btn next" id="next1">Next</button>
+                    </div>
+                </div>
+
+                <!-- Section 2 -->
+                <div class="form-section" id="section2">
+                    <h2>Studio Setup</h2>
+                    <div class="form-group">
+                        <label class="required">Which studio setup would you prefer?</label>
+                        <div class="image-selection">
+                            <label class="image-option">
+                                <input type="radio" name="setup" value="The Nexus Setup" required>
+                                <img src="./images/nexus-setup.jpg" alt="The Nexus Setup"
+                                    onerror="this.src='https://images.unsplash.com/photo-1511379938547-c1f69419868d?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80'">
+                                <div class="image-label">The Nexus Setup</div>
+                            </label>
+                            <label class="image-option">
+                                <input type="radio" name="setup" value="The Duality Setup">
+                                <img src="./images/duality-setup.jpg" alt="The Duality Setup"
+                                    onerror="this.src='https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80'">
+                                <div class="image-label">The Duality Setup</div>
+                            </label>
+                            <label class="image-option">
+                                <input type="radio" name="setup" value="The Sync Setup">
+                                <img src="./images/sync-setup.jpg" alt="The Sync Setup"
+                                    onerror="this.src='https://images.unsplash.com/photo-1590602847861-f357a9332bbc?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80'">
+                                <div class="image-label">The Sync Setup</div>
+                            </label>
+                            <label class="image-option">
+                                <input type="radio" name="setup" value="The Halo Setup">
+                                <img src="./images/halo-setup.jpg" alt="The Halo Setup"
+                                    onerror="this.src='https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80'">
+                                <div class="image-label">The Halo Setup</div>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="people" class="required">How many people will be recording?</label>
+                            <select id="people" name="people" required>
+                                <option value="" disabled selected>Select number</option>
+                                <option>1</option>
+                                <option>2</option>
+                                <option>3</option>
+                                <option>4</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="experience">Experience Level</label>
+                            <select id="experience" name="experience">
+                                <option value="" disabled selected>Select your level</option>
+                                <option>Beginner</option>
+                                <option>Intermediate</option>
+                                <option>Advanced</option>
+                                <option>Professional</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-navigation">
+                        <button type="button" class="nav-btn prev" id="prev2">Previous</button>
+                        <button type="button" class="nav-btn next" id="next2">Next</button>
+                    </div>
+                </div>
+
+                <!-- Section 3 -->
+                <div class="form-section" id="section3">
+                    <h2>Package Selection</h2>
+                    <div class="form-group">
+                        <label class="required">Choose your packages:</label>
+                        <div class="checkbox-group">
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="basic" name="package" value="Basic Package" required>
+                                <label for="basic">Basic Package — Includes microphones and lighting</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="cameras" name="package" value="Additional Cameras Package">
+                                <label for="cameras">Additional Cameras Package — Multi-angle camera setup</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="teleprompter" name="package" value="Teleprompter Package">
+                                <label for="teleprompter">Teleprompter Package — Ideal for scripted shoots</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="editing" name="package" value="Post-Production Package">
+                                <label for="editing">Post-Production Package — Basic editing services</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="addons">Additional Add-ons</label>
+                        <select id="addons" name="addons" multiple>
+                            <option>Green Screen Setup</option>
+                            <option>Professional Audio Mixing</option>
+                            <option>4K Recording Upgrade</option>
+                            <option>Live Streaming Setup</option>
+                        </select>
+                        <small>Hold Ctrl (Windows) or Cmd (Mac) to select multiple add-ons.</small>
+                    </div>
+                    <div class="form-navigation">
+                        <button type="button" class="nav-btn prev" id="prev3">Previous</button>
+                        <button type="button" class="nav-btn next" id="next3">Next</button>
+                    </div>
+                </div>
+
+                <!-- Section 4 -->
+                <div class="form-section" id="section4">
+                    <h2>Timing & Duration</h2>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="date" class="required">Preferred Date</label>
+                            <input type="date" id="date" name="date" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="duration" class="required">Duration (hours)</label>
+                            <select id="duration" name="duration" required>
+                                <option value="" disabled selected>Select duration</option>
+                                <option>1</option>
+                                <option>2</option>
+                                <option>3</option>
+                                <option>4</option>
+                                <option>5</option>
+                                <option>6</option>
+                                <option>7</option>
+                                <option>8</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="required">Select Your Time Slot</label>
+                        <div class="time-slots-container">
+                            <div class="time-slots-grid" id="timeSlotsGrid">
+                                <!-- Time slots will be generated here -->
+                            </div>
+                        </div>
+                        <input type="hidden" id="time_slot" name="time_slot" required>
+                    </div>
+
+                    <div class="booking-visualization" id="bookingVisualization" style="display: none;">
+                        <h4>Booking Timeline</h4>
+                        <div class="time-line">
+                            <!-- Time markers will be added here -->
+                        </div>
+                        <div class="time-labels">
+                            <span>9:00</span>
+                            <span>12:00</span>
+                            <span>15:00</span>
+                            <span>18:00</span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="frequency">Booking Frequency</label>
+                        <select id="frequency" name="frequency">
+                            <option value="" disabled selected>Select frequency</option>
+                            <option>One-time session</option>
+                            <option>Weekly</option>
+                            <option>Bi-weekly</option>
+                            <option>Monthly</option>
+                        </select>
+                    </div>
+                    <div class="form-navigation">
+                        <button type="button" class="nav-btn prev" id="prev4">Previous</button>
+                        <button type="button" class="nav-btn next" id="next4">Next</button>
+                    </div>
+                </div>
+
+                <!-- Section 5 -->
+                <div class="form-section" id="section5">
+                    <h2>Review & Submit</h2>
+                    <div class="form-group">
+                        <label for="requirements">Special Requirements or Notes</label>
+                        <textarea id="requirements" name="requirements"
+                            placeholder="e.g., specific equipment, color theme, props, accessibility needs, etc."></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="referral">How did you hear about us?</label>
+                        <select id="referral" name="referral">
+                            <option value="" disabled selected>Select an option</option>
+                            <option>Search Engine</option>
+                            <option>Social Media</option>
+                            <option>Friend/Colleague</option>
+                            <option>Advertisement</option>
+                            <option>Other</option>
+                        </select>
+                    </div>
+                    <div class="note">
+                        <strong>Note:</strong> Submitting this form does not confirm your booking.
+                        Our team will contact you within 24 hours to confirm your reservation and discuss any specific
+                        requirements.
+                    </div>
+
+                    <button type="submit" class="submit-btn">Submit Reservation Request</button>
+                    <div class="form-navigation">
+                        <button type="button" class="nav-btn prev" id="prev5">Previous</button>
+                    </div>
+                </div>
+
+                <div class="success-message" id="successMessage">
+                    <h3>Thank You!</h3>
+                    <p>Your reservation request has been submitted successfully. We will contact you shortly at the
+                        email you provided.</p>
+                </div>
+
+                <div class="error-message" id="errorMessage">
+                    <h3>Error</h3>
+                    <p id="errorText">There was an error submitting your reservation. Please try again.</p>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const form = document.getElementById('reservationForm');
+            const sections = document.querySelectorAll('.form-section');
+            const progressSteps = document.querySelectorAll('.progress-step');
+            const imageOptions = document.querySelectorAll('.image-option');
+            const successMessage = document.getElementById('successMessage');
+            const errorMessage = document.getElementById('errorMessage');
+            const errorText = document.getElementById('errorText');
+            const timeSlotsGrid = document.getElementById('timeSlotsGrid');
+            const bookingVisualization = document.getElementById('bookingVisualization');
+            const timeSlotInput = document.getElementById('time_slot');
+            const durationSelect = document.getElementById('duration');
+            const dateInput = document.getElementById('date');
+
+            let currentSection = 0;
+            let selectedTimeSlot = null;
+            let bookedSlots = [];
+
+            // Initialize form - show first section
+            showSection(currentSection);
+
+            // Set minimum date to today
+            const today = new Date().toISOString().split('T')[0];
+            dateInput.min = today;
+
+            // Generate time slots
+            generateTimeSlots();
+
+            // Image selection functionality
+            imageOptions.forEach(option => {
+                option.addEventListener('click', function () {
+                    // Remove selected class from all options
+                    imageOptions.forEach(opt => opt.classList.remove('selected'));
+                    // Add selected class to clicked option
+                    this.classList.add('selected');
+                    // Check the radio button inside
+                    const radio = this.querySelector('input[type="radio"]');
+                    radio.checked = true;
+                });
+            });
+
+            // Navigation buttons
+            document.getElementById('next1').addEventListener('click', () => navigateTo(1));
+            document.getElementById('next2').addEventListener('click', () => navigateTo(2));
+            document.getElementById('next3').addEventListener('click', () => navigateTo(3));
+            document.getElementById('next4').addEventListener('click', () => navigateTo(4));
+
+            document.getElementById('prev2').addEventListener('click', () => navigateTo(0));
+            document.getElementById('prev3').addEventListener('click', () => navigateTo(1));
+            document.getElementById('prev4').addEventListener('click', () => navigateTo(2));
+            document.getElementById('prev5').addEventListener('click', () => navigateTo(3));
+
+            // Time slot selection
+            durationSelect.addEventListener('change', generateTimeSlots);
+            dateInput.addEventListener('change', generateTimeSlots);
+
+            // Function to generate time slots
+            // Function to generate time slots
+            async function generateTimeSlots() {
+                timeSlotsGrid.innerHTML = '';
+                selectedTimeSlot = null;
+                timeSlotInput.value = '';
+                bookingVisualization.style.display = 'none';
+
+                const duration = parseInt(durationSelect.value) || 1;
+                const date = dateInput.value;
+
+                if (!date) {
+                    // Show all slots as available if no date selected
+                    generateDefaultTimeSlots(duration);
+                    return;
+                }
+
+                // Fetch booked slots from the server
+                try {
+                    const response = await fetch(`/api/booked_slots?date=${date}`);
+                    bookedSlots = await response.json();
+                    console.log('Booked slots:', bookedSlots); // Debug log
+                } catch (error) {
+                    console.error('Error fetching booked slots:', error);
+                    bookedSlots = [];
+                }
+
+                generateTimeSlotElements(duration);
+            }
+
+            // Function to generate time slots when no date is selected
+            function generateDefaultTimeSlots(duration) {
+                const timeSlots = [
+                    '09:30', '10:30', '11:30', '12:30', '13:30', '14:30', '15:30', '16:30', '17:30', '18:30'
+                ];
+
+                timeSlots.forEach(slot => {
+                    createTimeSlotElement(slot, duration, true); // All slots available by default
+                });
+            }
+
+            // Function to generate time slot elements with availability check
+            function generateTimeSlotElements(duration) {
+                const timeSlots = [
+                    '09:30', '10:30', '11:30', '12:30', '13:30', '14:30', '15:30', '16:30', '17:30', '18:30'
+                ];
+
+                timeSlots.forEach(slot => {
+                    const isAvailable = isTimeSlotAvailable(slot, duration);
+                    createTimeSlotElement(slot, duration, isAvailable);
+                });
+            }
+
+            // Function to create individual time slot element
+            function createTimeSlotElement(slot, duration, isAvailable) {
+                const slotElement = document.createElement('div');
+                slotElement.className = 'time-slot';
+                slotElement.dataset.time = slot;
+
+                const slotLabel = document.createElement('div');
+                slotLabel.className = 'time-slot-label';
+                slotLabel.textContent = slot;
+
+                const slotStatus = document.createElement('div');
+                slotStatus.className = 'time-slot-status';
+
+                if (!isAvailable) {
+                    slotElement.classList.add('unavailable');
+                    slotStatus.textContent = 'Unavailable';
+                } else {
+                    slotElement.addEventListener('click', () => selectTimeSlot(slot, duration, slotElement));
+                    slotStatus.textContent = 'Available';
+                }
+
+                slotElement.appendChild(slotLabel);
+                slotElement.appendChild(slotStatus);
+                timeSlotsGrid.appendChild(slotElement);
+            }
+            // Function to check if a time slot is available
+            function isTimeSlotAvailable(startTime, duration) {
+                const startHour = parseInt(startTime.split(':')[0]);
+                const startMinute = parseInt(startTime.split(':')[1]);
+                const endTime = calculateEndTime(startTime, duration);
+
+                // Check against all booked slots
+                for (const bookedSlot of bookedSlots) {
+                    const bookedStart = bookedSlot.start;
+                    const bookedEnd = bookedSlot.end;
+
+                    // Check for overlap
+                    if (
+                        (startTime < bookedEnd && endTime > bookedStart)
+                    ) {
+                        return false;
+                    }
+                }
+
+                return true;
+            }
+
+            // Function to calculate end time
+            function calculateEndTime(startTime, duration) {
+                const [hours, minutes] = startTime.split(':').map(Number);
+                let endHours = hours + duration;
+                let endMinutes = minutes;
+
+                // Handle hour overflow
+                if (endHours >= 24) {
+                    endHours -= 24;
+                }
+
+                return `${endHours.toString().padStart(2, '0')}:${endMinutes.toString().padStart(2, '0')}`;
+            }
+
+            // Function to select a time slot
+            function selectTimeSlot(startTime, duration, element) {
+                // Remove selected class from all time slots
+                document.querySelectorAll('.time-slot').forEach(slot => {
+                    slot.classList.remove('selected');
+                });
+
+                // Add selected class to clicked time slot
+                element.classList.add('selected');
+                selectedTimeSlot = startTime;
+                timeSlotInput.value = `${startTime} (${duration} hour${duration > 1 ? 's' : ''})`;
+
+                // Update booking visualization
+                updateBookingVisualization(startTime, duration);
+            }
+
+            // Function to update booking visualization
+            function updateBookingVisualization(startTime, duration) {
+                bookingVisualization.style.display = 'block';
+                const timeLine = bookingVisualization.querySelector('.time-line');
+                timeLine.innerHTML = '';
+
+                // Add booked time markers
+                bookedSlots.forEach(slot => {
+                    const bookedMarker = document.createElement('div');
+                    bookedMarker.className = 'time-marker booked';
+                    bookedMarker.style.left = `${(parseInt(slot.start.split(':')[0]) - 9) * (100 / 9)}%`;
+                    bookedMarker.style.width = `${(parseInt(slot.end.split(':')[0]) - parseInt(slot.start.split(':')[0])) * (100 / 9)}%`;
+                    timeLine.appendChild(bookedMarker);
+                });
+
+                // Add selected time marker
+                const selectedMarker = document.createElement('div');
+                selectedMarker.className = 'time-marker selected';
+                selectedMarker.style.left = `${(parseInt(startTime.split(':')[0]) - 9) * (100 / 9)}%`;
+                selectedMarker.style.width = `${duration * (100 / 9)}%`;
+                timeLine.appendChild(selectedMarker);
+            }
+
+            // Function to navigate between sections
+            function navigateTo(sectionIndex) {
+                // Validate current section before moving
+                if (sectionIndex > currentSection && !validateSection(currentSection)) {
+                    alert('Please fill in all required fields before proceeding.');
+                    return;
+                }
+
+                // Special validation for time slot section
+                if (sectionIndex === 4 && currentSection === 3 && !selectedTimeSlot) {
+                    alert('Please select an available time slot before proceeding.');
+                    return;
+                }
+
+                showSection(sectionIndex);
+                currentSection = sectionIndex;
+                updateProgress();
+            }
+
+            // Function to show a specific section
+            function showSection(index) {
+                sections.forEach(section => section.classList.remove('active'));
+                sections[index].classList.add('active');
+
+                // Scroll to top of form
+                document.querySelector('.form-container').scrollIntoView({ behavior: 'smooth' });
+            }
+
+            // Function to validate a section
+            function validateSection(sectionIndex) {
+                const section = sections[sectionIndex];
+                const requiredFields = section.querySelectorAll('[required]');
+
+                for (let field of requiredFields) {
+                    if (!field.value) {
+                        field.focus();
+                        return false;
+                    }
+                }
+
+                return true;
+            }
+
+            // Update progress steps
+            function updateProgress() {
+                progressSteps.forEach((step, index) => {
+                    if (index <= currentSection) {
+                        step.classList.add('active');
+                    } else {
+                        step.classList.remove('active');
+                    }
+                });
+            }
+
+            // Form submission handler
+            form.addEventListener('submit', async function (e) {
+                e.preventDefault();
+
+                // Validate final section
+                if (!validateSection(currentSection)) {
+                    alert('Please fill in all required fields before submitting.');
+                    return;
+                }
+
+                // Show loading state
+                const submitBtn = form.querySelector('.submit-btn');
+                const originalText = submitBtn.textContent;
+                submitBtn.textContent = 'Submitting...';
+                submitBtn.disabled = true;
+
+                try {
+                    const formData = new FormData(form);
+
+                    const response = await fetch('/submit', {
+                        method: 'POST',
+                        body: formData
+                    });
+
+                    const result = await response.json();
+
+                    if (result.success) {
+                        // Show success message
+                        successMessage.style.display = 'block';
+                        errorMessage.style.display = 'none';
+                        form.reset();
+
+                        // Reset image selection
+                        imageOptions.forEach(opt => opt.classList.remove('selected'));
+
+                        // Reset time slots
+                        generateTimeSlots();
+
+                        // Scroll to success message
+                        successMessage.scrollIntoView({ behavior: 'smooth' });
+                    } else {
+                        // Show error message
+                        errorText.textContent = result.error || 'There was an error submitting your reservation. Please try again.';
+                        errorMessage.style.display = 'block';
+                        successMessage.style.display = 'none';
+                    }
+                } catch (error) {
+                    // Show error message
+                    errorText.textContent = 'Network error. Please check your connection and try again.';
+                    errorMessage.style.display = 'block';
+                    successMessage.style.display = 'none';
+                } finally {
+                    // Reset button state
+                    submitBtn.textContent = originalText;
+                    submitBtn.disabled = false;
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>
