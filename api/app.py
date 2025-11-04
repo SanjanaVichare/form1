@@ -1,12 +1,12 @@
-from flask import Flask, render_template, request, redirect, url_for, jsonify
+from flask import Flask, render_template, request, jsonify
 import os
 import pandas as pd
 from datetime import datetime, timedelta
 import json
 
-app = Flask(__name__)
+app = Flask(__name__, template_folder='../templates')
 
-EXCEL_FILE = 'bookings.xlsx'
+EXCEL_FILE = os.path.join(os.path.dirname(__file__), '../bookings.xlsx')
 
 # Initialize Excel file if it doesn't exist
 def initialize_excel():
@@ -26,35 +26,27 @@ def get_booked_slots(date=None):
     
     try:
         df = pd.read_excel(EXCEL_FILE)
-        
-        # Check if dataframe is empty
         if df.empty:
             return []
         
-        # Filter by specific date if provided
         if date:
             df = df[df['Date'] == date]
-        
-        # Check if we have any bookings after filtering
         if df.empty:
             return []
         
         booked_slots = []
         for _, row in df.iterrows():
             try:
-                time_slot = str(row['Time Slot']).split(' ')[0]  # Get just the time part (HH:MM)
+                time_slot = str(row['Time Slot']).split(' ')[0]
                 duration = int(row['Duration'])
-                
-                # Parse the time slot (format: "HH:MM")
                 start_time = datetime.strptime(time_slot, '%H:%M')
                 end_time = start_time + timedelta(hours=duration)
-                
                 booked_slots.append({
                     'start': time_slot,
                     'duration': duration,
                     'end': end_time.strftime('%H:%M')
                 })
-            except (ValueError, KeyError, TypeError) as e:
+            except Exception as e:
                 print(f"Error processing row: {e}")
                 continue
         
@@ -64,36 +56,25 @@ def get_booked_slots(date=None):
         print(f"Error reading Excel file: {e}")
         return []
 
-# Check if a time slot is available
 def is_time_slot_available(date, start_time, duration):
     booked_slots = get_booked_slots(date)
-    
-    # If no booked slots, it's available
     if not booked_slots:
         return True
     
-    # Parse the requested time
     requested_start = datetime.strptime(start_time, '%H:%M')
     requested_end = requested_start + timedelta(hours=duration)
     
     for booked in booked_slots:
         booked_start = datetime.strptime(booked['start'], '%H:%M')
         booked_end = datetime.strptime(booked['end'], '%H:%M')
-        
-        # Check for overlap
         if (requested_start < booked_end and requested_end > booked_start):
             return False
-    
     return True
 
-# Save booking to Excel
 def save_to_excel(data):
-    # Ensure Excel file exists
     initialize_excel()
-    
     df = pd.read_excel(EXCEL_FILE)
     
-    # Handle multiple selections (packages and addons)
     packages = data.get('package', [])
     if isinstance(packages, list):
         packages = ', '.join(packages)
@@ -133,7 +114,6 @@ def index():
 def get_booked_slots_api():
     date = request.args.get('date')
     booked_slots = get_booked_slots(date)
-    print(f"Returning booked slots for {date}: {booked_slots}")  # Debug log
     return jsonify(booked_slots)
 
 @app.route('/api/check_availability')
@@ -151,7 +131,6 @@ def check_availability():
 @app.route('/submit', methods=['POST'])
 def submit():
     try:
-        # Get form data
         data = {
             'name': request.form.get('name'),
             'email': request.form.get('email'),
@@ -160,8 +139,8 @@ def submit():
             'setup': request.form.get('setup'),
             'people': request.form.get('people'),
             'experience': request.form.get('experience'),
-            'package': request.form.getlist('package'),  # Multiple selection
-            'addons': request.form.getlist('addons'),    # Multiple selection
+            'package': request.form.getlist('package'),
+            'addons': request.form.getlist('addons'),
             'date': request.form.get('date'),
             'duration': request.form.get('duration'),
             'time_slot': request.form.get('time_slot'),
@@ -169,39 +148,21 @@ def submit():
             'requirements': request.form.get('requirements'),
             'referral': request.form.get('referral')
         }
-        
-        # Validate required fields
+
         required_fields = ['name', 'email', 'phone', 'setup', 'people', 'date', 'duration', 'time_slot']
         for field in required_fields:
             if not data.get(field):
                 return jsonify({'success': False, 'error': f'Missing required field: {field}'}), 400
         
-        # Extract just the time part from time_slot (in case it includes duration)
         time_part = data['time_slot'].split(' ')[0]
-        
-        # Validate time slot availability
         if not is_time_slot_available(data['date'], time_part, int(data['duration'])):
             return jsonify({'success': False, 'error': 'Selected time slot is no longer available'}), 400
         
-        # Save to Excel
         save_to_excel(data)
-        
-        # Send email notification (you can integrate this later)
-        # send_email_notification(data)
-        
         return jsonify({'success': True, 'message': 'Booking submitted successfully!'})
     
     except Exception as e:
-        print(f"Error in submit: {e}")  # Debug log
+        print(f"Error in submit: {e}")
         return jsonify({'success': False, 'error': str(e)}), 500
 
-# Email sending function (placeholder)
-def send_email_notification(data):
-    # This is where you would integrate your email sending logic
-    # You can use Flask-Mail, smtplib, or a service like SendGrid
-    print(f"Email would be sent to inwmhstudios@gmail.com with data: {data}")
-    pass
-
-if __name__ == '__main__':
-    initialize_excel()
-    app.run(debug=True)
+# ⚠️ Don't include app.run() — Vercel handles this automatically
